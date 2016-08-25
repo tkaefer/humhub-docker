@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:13.3
 
 ENV HUMHUB_VERSION=stable
 
