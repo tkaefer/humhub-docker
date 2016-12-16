@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 
 ENV HUMHUB_VERSION=stable
 
@@ -26,17 +26,17 @@ RUN apk add --no-cache \
     git wget unzip \
     sqlite \
     && rm -rf /var/cache/apk/*
-    
+
 
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
     php -r "if (hash('SHA384', file_get_contents('composer-setup.php')) === 'e115a8dc7871f15d853148a7fbac7da27d6c0030b848d9b3dc09e2a0388afed865e6a3d6b3c0fad45c48e2b5fc1196ae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
-    
+
 
 RUN mkdir /app && \
     cd /app && \
-    git clone https://github.com/cesardraw2/humhub.git humhub && \
+    git clone https://github.com/humhub/humhub.git humhub && \
     cd humhub && \
     git checkout $HUMHUB_VERSION
 
@@ -57,7 +57,7 @@ RUN chmod +x protected/yii && \
 
 COPY pool.conf /etc/php-fpm.d/pool.conf
 COPY nginx.conf /etc/nginx/nginx.conf
-copy supervisord.conf /etc/supervisord.conf	
+copy supervisord.conf /etc/supervisord.conf
 
 VOLUME /app/humhub/uploads
 VOLUME /app/humhub/assets
